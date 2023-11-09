@@ -41,7 +41,15 @@
             <div class="flex-grow-1 bg-light rounded-2 p-2 me-1 w-50">
                 <h3>Tasks</h3>
                 <div id="task-list">
-                    <div class="task bg-light p-1 rounded-2 ps-2">Sample task</div>
+                    <!-- <div class="task bg-light p-1 rounded-2 ps-2 d-flex align-items-center">
+                        <span class="me-auto">Sample Task</span>
+                        <button class="btn btn-sm btn-success me-1">
+                            <i class="bi bi-check"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div> -->
                 </div>
             </div>
             <div class="flex-grow-1 bg-light rounded-2 p-2 w-50">
@@ -56,24 +64,84 @@
         crossorigin="anonymous"></script>
 
     <script>
-        let addBtn = document.querySelector("#add-btn");
+        const Type = {
+            Todo: 1,
+            Done: 2
+        };
 
+        let tasks = [];
+
+        function addToList(task) {
+            let div = document.createElement("div");
+            div.className = "task bg-light p-1 rounded-2 ps-2 d-flex align-items-center"
+
+            let span = document.createElement("span");
+            span.classList.add("me-auto");
+            span.textContent = task.text;
+            div.appendChild(span);
+
+            if (task.type === Type.Todo) {
+                let buttonDone = document.createElement("button");
+                buttonDone.classList.add("btn", "btn-sm", "btn-success", "me-1");
+                buttonDone.innerHTML = '<i class="bi bi-check"></i>';
+                div.appendChild(buttonDone);
+            }
+
+            let buttonRemove = document.createElement("button");
+            buttonRemove.classList.add("btn", "btn-sm", "btn-danger");
+            let iElem = document.createElement("i");
+            iElem.classList.add("bi", "bi-x");
+            buttonRemove.appendChild(iElem);
+            div.appendChild(buttonRemove);
+
+            buttonRemove.addEventListener("click", () => {
+                div.remove();
+                tasks = tasks.filter(t => t !== task);
+                saveTasks();
+            });
+
+            let list = document.querySelector(task.type === Type.Todo ? "#task-list" : "done-list");
+            list.appendChild(div);
+        }
+
+        function saveTasks() {
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function loadTasks() {
+            let lastTasks = localStorage.getItem("tasks");
+            if (!lastTasks) return;
+
+            tasks = JSON.parse(lastTasks);
+            tasks.forEach(addToList);
+        }
+
+        window.addEventListener("load", () => {
+            loadTasks();
+        });
+
+        let addBtn = document.querySelector("#add-btn");
         addBtn.addEventListener("click", () => {
             // 1. Read the text in #task-input.
             let input = document.querySelector("#task-input");
-            let task = input.value;
 
-            if (!task.length) return;
+            let text = input.value;
+            if (!text.length) return;
 
-            // 2. Append the text to #task-list.
-            let newTask = document.createElement("div");
-            newTask.classList.add("task", "bg-light", "p-1", "rounded-2", "ps-2");
-            newTask.textContent = task;
+            // 2. Create a new Task object.
+            let task = {
+                text: text,
+                type: Type.Todo
+            };
 
-            let taskList = document.querySelector("#task-list");
-            taskList.appendChild(newTask);
+            // 3. Append the new Task object to tasks
+            tasks.push(task);
+            saveTasks();
 
-            // 3. Clear #task-input.
+            // 4. Create a new task item and attach it to #task-list.
+            addToList(task);
+
+            // 5. Clear #task-input.
             input.value = "";
         });
     </script>
