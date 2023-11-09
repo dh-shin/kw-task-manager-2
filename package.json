@@ -1,0 +1,34 @@
+{
+  "name": "kw-task-manager-2",
+  "version": "0.0.1",
+  "description": "Simple Task Manager",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dh-shin/kw-task-manager-2.git"
+  },
+  "author": "dhshin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dh-shin/kw-task-manager-2/issues"
+  },
+  "homepage": "https://github.com/dh-shin/kw-task-manager-2#readme",
+  "devDependencies": {
+    "@electron-forge/cli": "^6.4.2",
+    "@electron-forge/maker-deb": "^6.4.2",
+    "@electron-forge/maker-rpm": "^6.4.2",
+    "@electron-forge/maker-squirrel": "^6.4.2",
+    "@electron-forge/maker-zip": "^6.4.2",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
+    "electron": "27.0.4"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}
